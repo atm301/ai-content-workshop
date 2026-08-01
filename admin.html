@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0e3f3a">
 <meta name="robots" content="noindex,nofollow">
-<title>後台｜AI 內容生產線 Day2 學員產出與證書</title>
+<title>後台｜AI 內容生產線 Day2 學員產出追蹤</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%82%EF%B8%8F%3C/text%3E%3C/svg%3E">
@@ -41,7 +41,7 @@
 <body>
 <div class="stripe"></div>
 <header><div class="bar">
-  <span class="ttl">🗂️ Day2 後台 <small style="color:var(--mute);font-weight:700;font-size:.72rem">四大產出與證書</small></span>
+  <span class="ttl">🗂️ Day2 後台 <small style="color:var(--mute);font-weight:700;font-size:.72rem">四大產出追蹤</small></span>
   <div class="sp">
     <select id="cohortSel" title="梯次（上課日期）"></select>
     <input class="s" id="q" placeholder="搜尋品牌/姓名" style="width:150px">
@@ -53,7 +53,6 @@
   <div class="chips">
     <span class="chip">學員數 <b id="cN">0</b></span>
     <span class="chip">有填產出 <b id="cCommit">0</b></span>
-    <span class="chip">下載證書 <b id="cCert">0</b></span>
     <span class="chip">小考平均 <b id="cAvg">0</b></span>
     <span class="chip" id="cUpd">—</span>
   </div>
@@ -87,7 +86,6 @@
     var list=filtered(), grid=document.getElementById('grid'), empty=document.getElementById('empty');
     document.getElementById('cN').textContent=list.length;
     document.getElementById('cCommit').textContent=list.filter(committed).length;
-    document.getElementById('cCert').textContent=list.filter(function(r){return r.cert_at;}).length;
     var avg=list.length?(list.reduce(function(a,r){return a+(+r.score||0);},0)/list.length):0;
     document.getElementById('cAvg').textContent=avg.toFixed(1);
     if(!list.length){grid.innerHTML='';empty.style.display='block';return;} empty.style.display='none';
@@ -97,16 +95,16 @@
       var txt=(r.commit_text||'').trim();
       return '<div class="sc'+(committed(r)?' done':'')+'">'+
         '<div class="top"><span class="shop">🎬 '+esc(r.code||'—')+'</span><span class="nm">'+esc(r.name||'')+'</span>'+
-        '<span class="badges">'+(r.cert_at?'<span class="badge b-cert">🎓 已領證</span>':'')+'<span class="badge b-score">小考 '+(+r.score||0)+'/8</span></span></div>'+
+        '<span class="badges"><span class="badge b-score">小考 '+(+r.score||0)+'/8</span></span></div>'+
         '<ul>'+items+'</ul>'+(txt?'<div class="txt">✍️ '+esc(txt)+'</div>':'')+
-        '<div class="meta">梯次 '+esc(r.cohort)+' · 更新 '+fmt(r.updated_at)+(r.cert_at?' · 領證 '+fmt(r.cert_at):'')+'</div></div>';
+        '<div class="meta">梯次 '+esc(r.cohort)+' · 更新 '+fmt(r.updated_at)+'</div></div>';
     }).join('');
   }
   function csv(){
     var list=filtered();
-    var head=['梯次','品牌名','姓名','小考分數','已領證',''].concat(COMMITS,['自填','更新時間']);
+    var head=['梯次','品牌名','姓名','小考分數',''].concat(COMMITS,['自填','更新時間']);
     var lines=[head.join(',')];
-    list.forEach(function(r){var chk=Array.isArray(r.commit_checks)?r.commit_checks:[];lines.push([r.cohort,'"'+String(r.code||'').replace(/"/g,'""')+'"',r.name,(+r.score||0),(r.cert_at?'是':'否'),''].concat(COMMITS.map(function(c,i){return chk[i]?'V':'';}),['"'+String(r.commit_text||'').replace(/"/g,'""')+'"',fmt(r.updated_at)]).join(','));});
+    list.forEach(function(r){var chk=Array.isArray(r.commit_checks)?r.commit_checks:[];lines.push([r.cohort,'"'+String(r.code||'').replace(/"/g,'""')+'"',r.name,(+r.score||0),''].concat(COMMITS.map(function(c,i){return chk[i]?'V':'';}),['"'+String(r.commit_text||'').replace(/"/g,'""')+'"',fmt(r.updated_at)]).join(','));});
     var blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Day2學員產出_'+(cohort||'全部')+'.csv';a.click();
   }
