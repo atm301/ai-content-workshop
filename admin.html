@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e3f3a">
+<meta name="robots" content="noindex,nofollow">
+<title>後台｜AI 內容生產線 Day2 學員產出與證書</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%82%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<style>
+  :root{ --bg:#eef7f4; --bg2:#fff; --bg3:#dcefe9; --tint:#e5f4ef; --ink:#12352f; --mute:#5a7269; --line:#cfe7df; --teal:#0f9d8f; --teal-d:#0b6b62; --navy:#123a52; --gold:#d99a2b; --gold-d:#8a5f10; --green:#12925a; }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{font-family:'Noto Sans TC',system-ui,'PingFang TC','Microsoft JhengHei',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;}
+  button,select,input{font-family:inherit;} .stripe{height:8px;background:repeating-linear-gradient(90deg,var(--teal) 0 18px,#10b981 18px 36px,var(--navy) 36px 54px);}
+  header{position:sticky;top:0;z-index:10;background:rgba(238,247,244,.96);backdrop-filter:blur(8px);border-bottom:3px solid var(--teal);}
+  .bar{max-width:1280px;margin:0 auto;padding:11px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .bar .ttl{font-weight:900;color:var(--navy);font-size:1.05rem;display:flex;align-items:center;gap:8px;}
+  .bar .sp{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  select,input.s{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:700;font-size:.9rem;color:var(--ink);}
+  .btn{border:0;border-radius:10px;font-weight:900;padding:8px 14px;font-size:.88rem;background:var(--bg2);color:var(--ink);border:1px solid var(--line);} .btn:hover{border-color:var(--teal);color:var(--teal-d);}
+  .btn-p{background:var(--teal);color:#fff;border-color:var(--teal);} .btn-p:hover{filter:brightness(1.05);color:#fff;}
+  .wrap{max-width:1280px;margin:0 auto;padding:18px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .chip{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-weight:800;font-size:.9rem;} .chip b{color:var(--teal-d);font-size:1.05rem;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+  .sc{background:var(--bg2);border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:14px;padding:14px 16px;}
+  .sc.done{border-top-color:var(--gold);}
+  .sc .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+  .sc .shop{font-weight:900;color:var(--navy);font-size:1.08rem;word-break:break-all;} .sc .nm{color:var(--mute);font-size:.88rem;}
+  .sc .badges{margin-left:auto;display:flex;gap:6px;}
+  .badge{font-size:.66rem;font-weight:900;padding:2px 9px;border-radius:999px;} .b-cert{background:var(--gold);color:#3a2600;} .b-score{background:var(--bg3);color:var(--teal-d);}
+  .sc ul{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:4px;font-size:.9rem;}
+  .sc ul li{padding-left:22px;position:relative;color:var(--ink);} .sc ul li.on::before{content:'☑';position:absolute;left:0;color:var(--green);} .sc ul li.off::before{content:'☐';position:absolute;left:0;color:#bcd4cc;} .sc ul li.off{color:#9fb6ae;}
+  .sc .txt{margin-top:10px;background:var(--tint);border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:9px;padding:9px 11px;font-size:.9rem;white-space:pre-wrap;}
+  .sc .meta{color:var(--mute);font-size:.74rem;margin-top:8px;}
+  .empty{text-align:center;color:var(--mute);padding:60px 20px;}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<header><div class="bar">
+  <span class="ttl">🗂️ Day2 後台 <small style="color:var(--mute);font-weight:700;font-size:.72rem">四大產出與證書</small></span>
+  <div class="sp">
+    <select id="cohortSel" title="梯次（上課日期）"></select>
+    <input class="s" id="q" placeholder="搜尋品牌/姓名" style="width:150px">
+    <button class="btn" id="csv">⬇️ 匯出 CSV</button>
+    <button class="btn btn-p" id="reload">↻ 重新整理</button>
+  </div>
+</div></header>
+<div class="wrap">
+  <div class="chips">
+    <span class="chip">學員數 <b id="cN">0</b></span>
+    <span class="chip">有填產出 <b id="cCommit">0</b></span>
+    <span class="chip">下載證書 <b id="cCert">0</b></span>
+    <span class="chip">小考平均 <b id="cAvg">0</b></span>
+    <span class="chip" id="cUpd">—</span>
+  </div>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty" style="display:none">這個梯次還沒有學員報到。</div>
+</div>
+<script>
+  var SUPA_URL='https://dpglkagtzdwiovzbtase.supabase.co';
+  var SUPA_KEY='sb_publishable_Tuj9p4DXvO-jEqVcBnumTg_TqZ1NnRu';
+  var COURSE='ai-workflow-day2';
+  var COMMITS=['社群視覺圖 ×3','短影音腳本 ×1','自動化流程 ×1','複盤摘要 ×1','建作品資料夾'];
+  var rows=[], cohort='';
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];});}
+  function fmt(s){try{return new Date(s).toLocaleString('zh-TW',{hour12:false,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return '';}}
+  function committed(r){ return (Array.isArray(r.commit_checks)&&r.commit_checks.some(function(x){return x;})) || (r.commit_text||'').trim().length>0; }
+  async function load(){
+    try{ var res=await fetch(SUPA_URL+'/rest/v1/lw_line_students?course=eq.'+encodeURIComponent(COURSE)+'&select=*&order=cohort.desc,code.asc',{headers:{apikey:SUPA_KEY,Authorization:'Bearer '+SUPA_KEY}}); rows=await res.json(); if(!Array.isArray(rows))rows=[]; }catch(e){ rows=[]; }
+    var cs={}; rows.forEach(function(r){cs[r.cohort]=(cs[r.cohort]||0)+1;});
+    var keys=Object.keys(cs).sort().reverse();
+    var sel=document.getElementById('cohortSel');
+    sel.innerHTML='<option value="">全部梯次（'+rows.length+'）</option>'+keys.map(function(k){return '<option value="'+esc(k)+'">'+esc(k)+'（'+cs[k]+' 人）</option>';}).join('');
+    if(cohort && keys.indexOf(cohort)<0)cohort=''; sel.value=cohort;
+    document.getElementById('cUpd').textContent='更新 '+new Date().toLocaleTimeString('zh-TW',{hour12:false});
+    render();
+  }
+  function filtered(){
+    var q=(document.getElementById('q').value||'').trim().toLowerCase();
+    return rows.filter(function(r){ if(cohort && r.cohort!==cohort)return false; if(q){return ((r.code||'').toLowerCase().indexOf(q)>=0)||((r.name||'').toLowerCase().indexOf(q)>=0);} return true; });
+  }
+  function render(){
+    var list=filtered(), grid=document.getElementById('grid'), empty=document.getElementById('empty');
+    document.getElementById('cN').textContent=list.length;
+    document.getElementById('cCommit').textContent=list.filter(committed).length;
+    document.getElementById('cCert').textContent=list.filter(function(r){return r.cert_at;}).length;
+    var avg=list.length?(list.reduce(function(a,r){return a+(+r.score||0);},0)/list.length):0;
+    document.getElementById('cAvg').textContent=avg.toFixed(1);
+    if(!list.length){grid.innerHTML='';empty.style.display='block';return;} empty.style.display='none';
+    grid.innerHTML=list.map(function(r){
+      var chk=Array.isArray(r.commit_checks)?r.commit_checks:[];
+      var items=COMMITS.map(function(c,i){return '<li class="'+(chk[i]?'on':'off')+'">'+esc(c)+'</li>';}).join('');
+      var txt=(r.commit_text||'').trim();
+      return '<div class="sc'+(committed(r)?' done':'')+'">'+
+        '<div class="top"><span class="shop">🎬 '+esc(r.code||'—')+'</span><span class="nm">'+esc(r.name||'')+'</span>'+
+        '<span class="badges">'+(r.cert_at?'<span class="badge b-cert">🎓 已領證</span>':'')+'<span class="badge b-score">小考 '+(+r.score||0)+'/8</span></span></div>'+
+        '<ul>'+items+'</ul>'+(txt?'<div class="txt">✍️ '+esc(txt)+'</div>':'')+
+        '<div class="meta">梯次 '+esc(r.cohort)+' · 更新 '+fmt(r.updated_at)+(r.cert_at?' · 領證 '+fmt(r.cert_at):'')+'</div></div>';
+    }).join('');
+  }
+  function csv(){
+    var list=filtered();
+    var head=['梯次','品牌名','姓名','小考分數','已領證',''].concat(COMMITS,['自填','更新時間']);
+    var lines=[head.join(',')];
+    list.forEach(function(r){var chk=Array.isArray(r.commit_checks)?r.commit_checks:[];lines.push([r.cohort,'"'+String(r.code||'').replace(/"/g,'""')+'"',r.name,(+r.score||0),(r.cert_at?'是':'否'),''].concat(COMMITS.map(function(c,i){return chk[i]?'V':'';}),['"'+String(r.commit_text||'').replace(/"/g,'""')+'"',fmt(r.updated_at)]).join(','));});
+    var blob=new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Day2學員產出_'+(cohort||'全部')+'.csv';a.click();
+  }
+  document.getElementById('cohortSel').addEventListener('change',function(){cohort=this.value;render();});
+  document.getElementById('q').addEventListener('input',render);
+  document.getElementById('reload').addEventListener('click',load);
+  document.getElementById('csv').addEventListener('click',csv);
+  load(); setInterval(load,20000);
+</script>
+</body>
+</html>
